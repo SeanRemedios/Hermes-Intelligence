@@ -2,14 +2,17 @@ const lib = require('lib')({token: process.env.STDLIB_TOKEN});
 const request = require('request');
 const send = require('../../helpers/send.js');
 
-const HANDLER = 0;
-const ACTION = 1;
-const PHONE = 2;
-const FROM_ADDRESS = 3;
-const TO_ADDRESS = 4;
-const EVERY = 5;
-const OFTEN = 6;
-const MAX = 7;
+const HANDLER 		= 0;
+const ACTION 		= 1;
+const PHONE 		= 2;
+const FROM_ADDRESS 	= 3;
+const TO_ADDRESS 	= 4;
+const MINUTE 		= 5;
+const HOUR 			= 6;
+const DAY_OF_MONTH	= 7;
+const MONTH			= 8;
+const DAY_OF_WEEK 	= 9;
+const MAX			= 10;
 
 /**
 * Main messaging (SMS/MMS) handler. Upon receiving a message, first check to
@@ -52,6 +55,8 @@ module.exports = (
 		return callback(new Error('Can only invoke from valid Twilio Webhook'));
 	}
 
+	console.log(context);
+
 	// Create some developer-friendly to / from objects
 	let from = {
 		number: From,
@@ -75,79 +80,16 @@ module.exports = (
 		message = 'No media allowed';
 		send(from.number, message, to.number, callback);
 		return callback(new Error(message));
-		// // If we receive an image (or other media), we want to retrieve it in code
-		// let url = context.params['MediaUrl' + (numMedia - 1)];
-		// send(
-		// 	from.number,
-		// 	`We've received your media, just hold on a second.`,
-		// 	to.number,
-		// 	(err, result) => {
-		// 		if (err) {
-		// 			return callback(err);
-		// 		}
-
-		// 		// Get the image from Twilio's URL
-		// 		request(
-		// 			{
-		// 				url: url,
-		// 				encoding: null,
-		// 				method: 'GET'
-		// 			},
-		// 			(err, response, body) => {
-
-		// 				if (err) {
-		// 					// We couldn't get the image
-		// 					return send(
-		// 						from.number,
-		// 						'Sorry, we had trouble processing the image you sent. Try again.',
-		// 						to.number,
-		// 						callback
-		// 					);
-		// 				}
-
-		// 				// We got the image, and send it as a buffer using the `media` param
-		// 				lib[`${context.service.identifier}.messaging.__notfound__`]({
-		// 					tel: from.number,
-		// 					media: body,
-		// 					from: from,
-		// 					to: to
-		// 				}, (err, result) => {
-		// 					let message = err ? err.message : result;
-		// 					send(
-		// 						from.number,
-		// 						message,
-		// 						to.number,
-		// 						callback
-		// 					);
-		// 				});
-
-		// 			}
-		// 		);
-
-		// 	}
-		// );
-
 	} else {
 
 		text = Body.split(" ");
 	  	action = text[ACTION] // Identifies create, delete, update or read
 	  	
 	  	// TODO : Get parameters based on action
-	  	result = parseCreate(text);
+	  	createResult = parseCreate(text);
 
-	 //  	// CREATE
-	 //  	let result = {
-		// 	phone: text[PHONE],
-		// 	fromAddress: text[FROM_ADDRESS],
-		// 	toAddress: text[TO_ADDRESS],
-		// 	schedule: {
-		// 		every: text[EVERY],
-		// 		often: text[OFTEN],
-		// 		rest: text.length > MAX ? {...text.splice(MAX)} : {}
-		// 	}
-		// };
 		var item = {
-			text: result,
+			text: createResult,
 			completed: false
 		};
 
@@ -157,13 +99,25 @@ module.exports = (
 			lib[`${context.service.identifier}.${action}`](
 				item, 
 				(err, result) => {
-				let message = err ? err.message : result;
-				send(
-					from.number,
-					message,
-					to.number,
-					callback
-				);
+					createResult.id = result;
+					const tasks_wrapper = lib.seanr.taskswrapper['@dev'];
+					let task_result = tasks_wrapper({
+						data: createResult, 
+						service: 'seanr/hia', 
+						action: 'create', 
+						functionName: 'notifications'
+					}, (err, tasksresult) => {
+
+						let message = err ? err.message : result;
+						send(
+							from.number,
+							message,
+							to.number,
+							callback
+						);
+
+					});
+
 			});
 		}
 
@@ -178,11 +132,7 @@ parseCreate = (data) => {
 		phone: text[PHONE],
 		fromAddress: text[FROM_ADDRESS],
 		toAddress: text[TO_ADDRESS],
-		schedule: {
-			every: text[EVERY],
-			often: text[OFTEN],
-			rest: text.length > MAX ? {...text.splice(MAX)} : {}
-		}
+		cron: text[MINUTE] + " " + text[HOUR] + " " + text[DAY_OF_MONTH] + " " + text[MONTH] + " " + text[DAY_OF_WEEK]
 	};
 
 	return create;

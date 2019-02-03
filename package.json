@@ -5,6 +5,7 @@
   "author": "seanr <seanremedios12@gmail.com>",
   "main": "functions/__main__.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "bson": "^4.0.1",
     "ejs": "^2.5.7",
     "lib": "^3.0.2",
@@ -12,6 +13,7 @@
     "libphonenumber-js": "^1.7.8",
     "mime": "^1.5.0",
     "mongodb": "^2.2.33",
+    "striptags": "^3.1.1",
     "twilio": "^3.3.0"
   },
   "private": true,

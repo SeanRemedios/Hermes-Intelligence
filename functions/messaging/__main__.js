@@ -7,11 +7,11 @@ const ACTION 		= 1;
 const PHONE 		= 2;
 const FROM_ADDRESS 	= 3;
 const TO_ADDRESS 	= 4;
-const MINUTE 		= 5;
-const HOUR 			= 6;
-const DAY_OF_MONTH	= 7;
-const MONTH			= 8;
-const DAY_OF_WEEK 	= 9;
+const MINUTE 		= -5;
+const HOUR 			= -4;
+const DAY_OF_MONTH	= -3;
+const MONTH			= -2;
+const DAY_OF_WEEK 	= -1;
 const MAX			= 10;
 
 const DEV_ENVIRONMENT = '@dev';
@@ -97,7 +97,7 @@ module.exports = (
 	  	action = text[ACTION] // Identifies create, delete, update or read
 	  	
 	  	// TODO : Get parameters based on action
-	  	createResult = parseCreate(text);
+	  	createResult = parseCreate(text, Body);
 
 		var item = {
 			text: createResult,
@@ -136,15 +136,29 @@ module.exports = (
 
 };
 
-parseCreate = (data) => {
+parseCreate = (text, full_text) => {
+	addresses = getAddress(full_text);
+	console.log(addresses)
 
   	// CREATE
   	let create = {
 		phone: text[PHONE],
-		fromAddress: text[FROM_ADDRESS],
-		toAddress: text[TO_ADDRESS],
-		cron: text[MINUTE] + " " + text[HOUR] + " " + text[DAY_OF_MONTH] + " " + text[MONTH] + " " + text[DAY_OF_WEEK]
+		fromAddress: addresses[0],
+		toAddress: addresses[1],
+		cron: text[text.length+MINUTE] + " " + text[text.length+HOUR] + " " + text[text.length+DAY_OF_MONTH] + " " + text[text.length+MONTH] + " " + text[text.length+DAY_OF_WEEK]
 	};
 
 	return create;
+}
+
+getAddress = (text) => {
+	var regex  = /\[([^\]]*)]/g;
+
+	var matches = [];
+	while (m = regex.exec(text)) {
+		matches.push(m[1]);
+	}
+	console.log(matches);
+	console.log('-----');
+	return matches;
 }

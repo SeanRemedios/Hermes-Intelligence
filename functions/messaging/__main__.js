@@ -152,7 +152,7 @@ parseCreate = (text, full_text) => {
 }
 
 getAddress = (text) => {
-	var regex  = /\[([^\]]*)]/g;
+	var regex  = /\((.*?)\)/g;
 
 	var matches = [];
 	while (m = regex.exec(text)) {

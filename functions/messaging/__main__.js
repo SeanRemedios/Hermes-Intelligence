@@ -14,6 +14,17 @@ const MONTH			= 8;
 const DAY_OF_WEEK 	= 9;
 const MAX			= 10;
 
+const DEV_ENVIRONMENT = '@dev';
+const RELEASE_ENVIRONMENT = '@0.01';
+const ENVIRONMENT = DEV_ENVIRONMENT;
+
+const SERIVCE = 'seanr/hia';
+const CREATE_ACTION = 'create';
+const DELETE_ACTION = 'delete';
+const FUNCTION_NAME = 'notifications';
+
+const DATABASE_HANDLER = 'database';
+
 /**
 * Main messaging (SMS/MMS) handler. Upon receiving a message, first check to
 *		see if there's media (MMS), if so, invoke __notfound__ handler with a media
@@ -95,17 +106,17 @@ module.exports = (
 
 		// No image, try to find a handler for the message, default to __notfound__
 		let handler = Body.toLowerCase().split(" ")[HANDLER].trim().replace(/[^a-z0-9_-]/gi, '_');
-		if (handler === 'database') {
+		if (handler === DATABASE_HANDLER) {
 			lib[`${context.service.identifier}.${action}`](
 				item, 
 				(err, result) => {
 					createResult.id = result;
-					const tasks_wrapper = lib.seanr.taskswrapper['@dev'];
+					const tasks_wrapper = lib.seanr.taskswrapper[ENVIRONMENT];
 					let task_result = tasks_wrapper({
 						data: createResult, 
-						service: 'seanr/hia', 
-						action: 'create', 
-						functionName: 'notifications'
+						service: SERIVCE, 
+						action: CREATE_ACTION, 
+						functionName: ''
 					}, (err, tasksresult) => {
 
 						let message = err ? err.message : result;

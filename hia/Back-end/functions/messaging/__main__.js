@@ -119,7 +119,7 @@ module.exports = (
 						functionName: ''
 					}, (err, tasksresult) => {
 
-						let message = err ? err.message : result;
+						let message = err ? err.message : "Reminder set!";
 						send(
 							from.number,
 							message,

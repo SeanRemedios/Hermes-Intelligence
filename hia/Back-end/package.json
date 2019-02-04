@@ -1,6 +1,6 @@
 {
   "name": "hia",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "author": "seanr <seanremedios12@gmail.com>",
   "main": "functions/__main__.js",

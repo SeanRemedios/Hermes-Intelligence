@@ -24,7 +24,7 @@ Hermes Intelligence allows users to access GPS navigation, road conditions, traf
 
 1. Front end was developed by using Android Studio and Java. Mobile app is completely offline, only using SMS messaging to communicate. 
 2. Back End was deployed using Standard Library API in Javascript.
-3. Additional APIs that were used with Standard Library: Custom Tasks Wrapper, Google Maps API
+3. Additional APIs that were used with Standard Library: Custom Tasks Wrapper, Here Maps API
 4. Messaging service used: Twilio
 5. Database: MongoDB
 

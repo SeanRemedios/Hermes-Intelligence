@@ -44,3 +44,9 @@ https://devpost.com/software/hermes-intelligence
 ### Twitter Posts
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Hermes intelligence is an entirely offline (!) reminder system that makes sure you&#39;re on time! Using a <a href="https://twitter.com/twilio?ref_src=twsrc%5Etfw">@twilio</a> SMS, it sets a <a href="https://twitter.com/StdLibHQ?ref_src=twsrc%5Etfw">@StdLibHQ</a> task that triggers before your commute to check traffic with the <a href="https://twitter.com/here?ref_src=twsrc%5Etfw">@here</a> maps API! Ingenious. <a href="https://twitter.com/QHacks19?ref_src=twsrc%5Etfw">@QHacks19</a> <a href="https://t.co/oKC6oGNmk4">pic.twitter.com/oKC6oGNmk4</a></p>&mdash; Jacob Lee (@Hacubu) <a href="https://twitter.com/Hacubu/status/1092091870228987905?ref_src=twsrc%5Etfw">February 3, 2019</a></blockquote>
+
+### Images
+
+![Example SMS responses](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/755/160/datas/gallery.jpg)
+
+![Mobile App](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/757/065/datas/gallery.jpg)
